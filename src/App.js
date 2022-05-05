@@ -4,20 +4,20 @@ function App() {
   const data = [
     { type: "clear", symbol: "C" },
     { type: "dummy", symbol: "+/-" },
-    { type: "percentage", symbol: "%" },
-    { type: "divide", symbol: "÷" },
+    { type: "operator", symbol: "%" },
+    { type: "operator", symbol: "÷" },
     { type: "number", symbol: "7" },
     { type: "number", symbol: "8" },
     { type: "number", symbol: "9" },
-    { type: "multiply", symbol: "X" },
+    { type: "operator", symbol: "X" },
     { type: "number", symbol: "4" },
     { type: "number", symbol: "5" },
     { type: "number", symbol: "6" },
-    { type: "subtract", symbol: "-" },
+    { type: "operator", symbol: "-" },
     { type: "number", symbol: "1" },
     { type: "number", symbol: "2" },
     { type: "number", symbol: "3" },
-    { type: "add", symbol: "+" },
+    { type: "operator", symbol: "+" },
   ];
   const [num1, setNum1] = useState(null);
   const [num2, setNum2] = useState(null);
@@ -27,20 +27,51 @@ function App() {
     console.log(itemType);
     console.log(value);
     if (itemType === "number" && !op) {
-      if (!ans) value = parseInt(value);
-      setNum1((old) => old + value);
+      if (!ans) value = parseFloat(value);
+      setNum1((old) => parseFloat(old + value));
       setAns((old) => old + value);
     }
     if (itemType === "number" && op) {
-      if (!ans) value = parseInt(value);
-      setNum2((old) => old + value);
+      let num = parseFloat((ans+value).match(/\d+/g))
+      setNum2(num);
       setAns((old) => old + value);
+
     }
     if (itemType === "clear") {
       setAns(0);
+      setNum1(null);
+      setNum2(null);
       return;
     }
-    if (itemType != "number") {
+
+    if(itemType ==="equal"){
+      console.log("num1: "+num1+" num2: "+num2)
+      if(op ==="+"){
+        setNum1(num1+num2)
+        setAns(num1+num2);
+      }
+      if(op ==="-"){
+        setNum1(num1-num2)
+        setAns(num1-num2);
+      }
+       if(op ==="X"){
+        setNum1(num1*num2)
+        setAns(num1*num2);
+      }
+       if(op ==="÷"){
+        setNum1(num1/num2)
+        setAns(num1/num2);
+      }
+       if(op ==="%"){
+        setNum1((num1*num2)/100);
+        setAns((num1*num2)/100);
+      }
+      setNum2(null);
+      setOp(null);
+    }
+    if (itemType === "operator") {
+      setAns(value);
+      setOp(value)
     }
   };
   return (
@@ -72,9 +103,14 @@ function App() {
                   </button>
                 );
               })}
-            <button className="keys w-40">0</button>
+            <button className="keys w-40 " onClick={() => {
+                      calculator({ itemType: "number", value: "0" });
+                    }}>0</button>
             <button className="keys ">.</button>
-            <button className="keys clear">=</button>
+            <button className="keys clear"
+            onClick={() => {
+                      calculator({ itemType: "equal", value: "=" });
+                    }}>=</button>
           </div>
         </div>
       </div>
