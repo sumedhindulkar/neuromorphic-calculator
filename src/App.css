@@ -99,7 +99,7 @@ body {
   flex-wrap: wrap;
   padding: 15px 10px;
 }
-.keys {
+.main .bottom .keys {
   width: 20%;
   height: 65px;
   margin-right: 5px;
@@ -112,10 +112,14 @@ body {
   justify-content: center;
   align-items: center;
   color: #5a5a5a;
-  cursor: pointer !important;
   border: none;
 }
-.clear {
-  background-color: #2dd3c5;
+.main .bottom button:hover {
+  background: #b4b4b4 !important;
+  color: #f0f0f3;
+}
+
+.main .bottom .clear {
+  background-color: #2dd3c5 !important;
   color: #f0f0f3;
 }

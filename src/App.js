@@ -1,5 +1,5 @@
 import "./App.css";
-import { useReducer } from "react";
+import { useState } from "react";
 function App() {
   const data = [
     { type: "clear", symbol: "C" },
@@ -19,23 +19,30 @@ function App() {
     { type: "number", symbol: "3" },
     { type: "add", symbol: "+" },
   ];
-
-  const initialState = {
-    op1: 1,
-    op2: 2,
-    operator: "+",
-    ans: 0,
-  };
-  const reducer = (state, action) => {
-    switch (action) {
-      case 1:
-        return state + 1;
-      default:
-        throw new Error("Error");
+  const [num1, setNum1] = useState(null);
+  const [num2, setNum2] = useState(null);
+  const [op, setOp] = useState(null);
+  const [ans, setAns] = useState(0);
+  const calculator = ({ itemType, value }) => {
+    console.log(itemType);
+    console.log(value);
+    if (itemType === "number" && !op) {
+      if (!ans) value = parseInt(value);
+      setNum1((old) => old + value);
+      setAns((old) => old + value);
+    }
+    if (itemType === "number" && op) {
+      if (!ans) value = parseInt(value);
+      setNum2((old) => old + value);
+      setAns((old) => old + value);
+    }
+    if (itemType === "clear") {
+      setAns(0);
+      return;
+    }
+    if (itemType != "number") {
     }
   };
-  const [ans, dispatch] = useReducer(reducer, initialState.ans);
-
   return (
     <div className="app">
       <div className="design">
@@ -43,6 +50,8 @@ function App() {
         <div className="box2 neuro"></div>
         <div className="circle1 neuro"></div>
         <div className="circle2 neuro"></div>
+      </div>
+      <div>
         <div className="main neuro">
           <div className="top">
             <span>{ans}</span>
@@ -51,12 +60,19 @@ function App() {
             {data &&
               data.map((item) => {
                 return (
-                  <button className="keys" onClick={() => dispatch(1)}>
+                  <button
+                    key={item.symbol}
+                    className="keys"
+                    onClick={() => {
+                      calculator({ itemType: item.type, value: item.symbol });
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
                     {item.symbol}
                   </button>
                 );
               })}
-            <button className="keys w-40">O</button>
+            <button className="keys w-40">0</button>
             <button className="keys ">.</button>
             <button className="keys clear">=</button>
           </div>
